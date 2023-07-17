@@ -42,17 +42,18 @@ for obj in env.objects:
                     print(f"\u001B[31mDisabling {color}|\u001B[0m GameObject {data.name}")
                     data.m_IsActive = False
                 else:
-                    ignore = True
+                    ignore = True #moderator, ANTIgrav
 
         for key in scale:
             if key in data.name.lower():
-                print(f"\u001B[34mScaling {color}|\u001B[0m GameObject {data.name}...")
+                print(f"\u001B[34mScaling   {color}|\u001B[0m GameObject {data.name}...")
                 target_path = data.read_typetree()['m_Component'][0]['component']['m_PathID']
                 for obj2 in env.objects:
                     data2 = obj2.read()
-                    if data2.path_id == target_path:
-                        data2.__setattr__("m_LocalScale", data2.__getattribute__('m_LocalScale') * 100)
-                        data2.save()
+                    if hasattr(data2, 'path_id'):
+                        if data2.path_id == target_path:
+                            data2.__setattr__("m_LocalScale", data2.__getattribute__('m_LocalScale') * 100)
+                            data2.save()
 
         if ignore:
             print(f"\u001B[33mIgnoring  {color}|\u001B[0m GameObject {data.name}")
