@@ -1,7 +1,7 @@
 import UnityPy, os, subprocess, argparse, shutil
 
 def modUnity3d(path, noWalls, noGrav, pvp):
-    enable = [ 'dev', 'rocket', 'fly', 'content', 'creator', 'hammer', 'gun', 'stick', 'button', 'mod', 'admin', 'owner', 'menu', 'perm', 'access', 'vip', 'trust', 'support', 'artist' ]
+    enable = [ 'rank', 'rgb', 'supporter', 'boost', 'platforms', 'fly', 'dev', 'rocket', 'fly', 'content', 'creator', 'hammer', 'gun', 'stick', 'button', 'mod', 'admin', 'owner', 'menu', 'perm', 'access', 'vip', 'trust', 'support', 'artist' ]
     disable = [ 'block', 'vent', 'door', 'restrict', 'barrier', 'security', 'protect', 'anti' ]
     ignore = [ 'event', 'mode', 'voicemod' ]
     reenable = [ 'moder', 'vents' ]
