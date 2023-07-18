@@ -1,10 +1,10 @@
-import UnityPy, os, subprocess, argparse
+import UnityPy, os, subprocess, argparse, shutil
 
 def modUnity3d(path, noWalls, noGrav, pvp):
-    enable = [ 'mod', 'admin', 'owner', 'menu', 'perm', 'access', 'vip', 'trust', 'support', 'artist' ]
+    enable = [ 'rocket', 'fly', 'content', 'creator', 'hammer', 'gun', 'stick', 'button', 'mod', 'admin', 'owner', 'menu', 'perm', 'access', 'vip', 'trust', 'support', 'artist' ]
     disable = [ 'block', 'vent', 'door', 'restrict', 'barrier', 'security', 'protect', 'anti' ]
-    ignore = [ 'event', 'mode' ]
-    reenable = [ 'moder' ]
+    ignore = [ 'event', 'mode', 'voicemod' ]
+    reenable = [ 'moder', 'vents' ]
     scale = [ ]
 
     if noWalls:
@@ -82,29 +82,26 @@ def modUnity3d(path, noWalls, noGrav, pvp):
         f.write(env.file.save())
 
 def decompile(apk_path):
-    print(f"Decompiling {apk_path} into {apk_path[:-4]}")
+    print(f"\u001B[32mDecompiling {apk_path} into {apk_path[:-4]}\u001B[0m")
     sp = subprocess.Popen(["apktool", "d", "-f", apk_path], shell=True, stdin=subprocess.PIPE)
     sp.communicate(input=b'\n')
 
 def recompile(apk_path):
-    print(f"Recompiling {apk_path[:-4]} into {apk_path}")
-    sp = subprocess.Popen(["apktool", "b", "-f", "-d", apk_path[:-4], "-o", f"tmp-{apk_path}"], shell=True, stdin=subprocess.PIPE)
+    print(f"\u001B[32mRecompiling {apk_path[:-4]} into {apk_path}\u001B[0m")
+    sp = subprocess.Popen(["apktool", "b", "-f", "--use-aapt2", "-d", apk_path[:-4], "-o", f"tmp-{apk_path}"], shell=True, stdin=subprocess.PIPE)
     sp.communicate(input=b'\n')
 
-    print(f"Signing {apk_path}")
-    # Password is 123456
-    sp = subprocess.Popen(["jarsigner", "-verbose", "-sigalg", "SHA1withRSA", "-digestalg", "SHA1", "-keystore", "index.keystore", f"tmp-{apk_path}", "index"], shell=True, stdin=subprocess.PIPE)
-    sp.communicate(input=b'123456\n')
-
-    print(f"Aligning {apk_path}")
-    sp = subprocess.Popen(["zipalign", "-f", "-v", "4", f"tmp-{apk_path[:-4]}", f"modded-{apk_path}"], shell=True, stdin=subprocess.PIPE)
+    print(f"\u001B[32mAligning {apk_path}\u001B[0m")
+    sp = subprocess.Popen(["zipalign", "-p", "4", f"tmp-{apk_path}", f"tmp2-{apk_path}"], shell=True, stdin=subprocess.PIPE)
     sp.communicate(input=b'\n')
 
-    print(f"Verifying {apk_path}")
-    sp = subprocess.Popen(["jarsigner", "-verify", "-verbose", "-certs", f"modded-{apk_path}"], shell=True, stdin=subprocess.PIPE)
+    print(f"\u001B[32mSigning {apk_path}\u001B[0m")
+    sp = subprocess.Popen(['ApkSigner', 'sign', '--key', 'index.pk8', '--cert', 'index.pem', '--v4-signing-enabled', 'false', '--out', f"modded-{apk_path}", f"tmp2-{apk_path}"] , shell=True, stdin=subprocess.PIPE)
     sp.communicate(input=b'\n')
 
     os.remove(f"tmp-{apk_path}")
+    os.remove(f"tmp2-{apk_path}")
+    shutil.rmtree(f"{apk_path[:-4]}")
 
 def main(apk_path, noWalls, noGrav, pvp):
     decompile(apk_path)
@@ -120,4 +117,4 @@ if __name__ == "__main__":
     parser.add_argument("--pvp", action="store_true", help="Enable PvP")
     args = parser.parse_args()
 
-    print(args.apk_path, args.noWalls, args.noGrav, args.pvp)
+    main(args.apk_path, args.noWalls, args.noGrav, args.pvp)
