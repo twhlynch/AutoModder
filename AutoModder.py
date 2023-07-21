@@ -6,6 +6,8 @@ def modUnity3d(path, noWalls, noGrav, pvp):
     ignore = [ 'event', 'mode', 'voicemod' ]
     reenable = [ 'moder', 'vents' ]
     scale = [ ]
+    enable_parent = [ 'enable' ]
+    enable_is = [ 'ara', 'aro', 'arm']
 
     if noWalls:
         disable.append('wall')
@@ -49,6 +51,12 @@ def modUnity3d(path, noWalls, noGrav, pvp):
 
             for key in reenable:
                 if key in data.name.lower():
+                    tree["m_IsActive"] = True
+                    changed = True
+                    will = "enable"
+                    
+            for key in enable_is:
+                if key == data.name.lower():
                     tree["m_IsActive"] = True
                     changed = True
                     will = "enable"
