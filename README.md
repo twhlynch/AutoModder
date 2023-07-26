@@ -1,6 +1,6 @@
 # AutoModder
 
-### .index's Ultimate Unity APK Auto-Modder
+### .index's Unity APK Auto-Modder
 
 ## Setup
 - [Python](https://www.python.org/)
