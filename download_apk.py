@@ -10,6 +10,8 @@ def get_search_results(search_term):
 def get_app_link(term):
 
     results = get_search_results(term)
+    if len(results) == 0:
+        return False
     for i in range(len(results)):
         print(f'{i} | {results[i]["appName"]}: \u001B[32m{results[i]["packageName"]}\u001B[0m | {results[i]["id"]}')
 
@@ -21,7 +23,9 @@ links = []
 list = input('List of apps: ').split(', ')
 
 for term in list:
-    links.append(get_app_link(term))
+    link = get_app_link(term)
+    if link:
+        links.append(link)
 
 print(f'Opening {links} in 5s...')
 time.sleep(5)
