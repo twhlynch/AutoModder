@@ -78,6 +78,8 @@ def modUnity3d(path, noWalls, noGrav, pvp):
                     transform_data = transform.read()
                     transform_tree = transform.read_typetree()
                     transform_tree["m_LocalScale"]["x"] *= 100
+                    transform_tree["m_LocalScale"]["y"] *= 100
+                    transform_tree["m_LocalScale"]["z"] *= 100
                     print(f'\u001B[34mScaled    {color}|\u001B[0m {data.name} to {transform_tree["m_LocalScale"]}')
                     transform.save_typetree(transform_tree)
 
