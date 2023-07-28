@@ -73,10 +73,12 @@ def modUnity3d(path, noWalls, noGrav, pvp):
                 if key in data.name.lower():
                     print(f"\u001B[34mScaling   {color}|\u001B[0m GameObject {data.name}")
                     transform = data.m_Transform.get_obj()
+                    transform_data = transform.read()
                     transform_tree = transform.read_typetree()
                     transform_tree["m_LocalScale"] *= 100
+                    print(f'\u001B[34mScaled    {color}|\u001B[0m {transform_data.name} to {transform_tree["m_LocalScale"]}')
                     transform.save_typetree(transform_tree)
-                    
+
                     # target_path = tree['m_Component'][0]['component']['m_PathID']
                     # for obj2 in env.objects:
                     #     data2 = obj2.read()
