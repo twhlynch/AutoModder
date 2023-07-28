@@ -72,17 +72,22 @@ def modUnity3d(path, noWalls, noGrav, pvp):
             for key in scale:
                 if key in data.name.lower():
                     print(f"\u001B[34mScaling   {color}|\u001B[0m GameObject {data.name}")
-                    target_path = tree['m_Component'][0]['component']['m_PathID']
-                    for obj2 in env.objects:
-                        data2 = obj2.read()
-                        tree2 = data2.read_typetree()
-                        if hasattr(data2, 'path_id'):
-                            if data2.path_id == target_path:
-                                print(f"\u001B[34mFound Path{color}|\u001B[0m {data2.type.name} {data2.name}")
-                                tree2["m_LocalScale"] *= 100
-                                print(f"\u001B[34mScaled to {color}|\u001B[0m {data2.__getattribute__('m_LocalScale')}")
-                                obj2.save_typetree(tree2)
-                                break
+                    transform = data.m_Transform.get_obj()
+                    transform_tree = transform.read_typetree()
+                    transform_tree["m_LocalScale"] *= 100
+                    transform.save_typetree(transform_tree)
+                    
+                    # target_path = tree['m_Component'][0]['component']['m_PathID']
+                    # for obj2 in env.objects:
+                    #     data2 = obj2.read()
+                    #     tree2 = data2.read_typetree()
+                    #     if hasattr(data2, 'path_id'):
+                    #         if data2.path_id == target_path:
+                    #             print(f"\u001B[34mFound Path{color}|\u001B[0m {data2.type.name} {data2.name}")
+                    #             tree2["m_LocalScale"] *= 100
+                    #             print(f"\u001B[34mScaled to {color}|\u001B[0m {data2.__getattribute__('m_LocalScale')}")
+                    #             obj2.save_typetree(tree2)
+                    #             break
 
             if changed:
                 if will == "enable" and was == False:
