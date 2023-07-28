@@ -6,7 +6,7 @@ def modUnity3d(path, noWalls, noGrav, pvp):
     ignore = [ 'event', 'mode', 'voicemod' ]
     reenable = [ 'moder', 'vents' ]
     scale = [ ]
-    enable_parent = [ 'enable' ]
+    enable_parent = [ 'enable', 'button' ]
     enable_is = [ 'ara', 'aro', 'arm']
 
     if noWalls:
@@ -61,6 +61,14 @@ def modUnity3d(path, noWalls, noGrav, pvp):
                     changed = True
                     will = "enable"
 
+            for key in enable_parent:
+                if key in data.name.lower():
+                    tree["m_IsActive"] = True
+                    changed = True
+                    will = "enable"
+                    traverse_parents(data)
+                    print(f"\u001B[34mTraversed {color}|\u001B[0m GameObject {data.name}")
+
             for key in scale:
                 if key in data.name.lower():
                     print(f"\u001B[34mScaling   {color}|\u001B[0m GameObject {data.name}")
@@ -88,6 +96,16 @@ def modUnity3d(path, noWalls, noGrav, pvp):
 
     with open(path, "wb") as f:
         f.write(env.file.save())
+
+def traverse_parents(data):
+    parent = data.m_Transform.get_obj().read().m_Father.get_obj()
+    if parent is not None:
+        parent_data = parent.read()
+        print(f"\u001B[34mParent    |\u001B[0m GameObject {parent_data.name}")
+        parent_tree = parent.read_typetree()
+        parent_tree["m_IsActive"] = True
+        parent.save_typetree(parent_tree)
+        traverse_parents(parent_data)
 
 def decompile(apk_path):
     print(f"\u001B[32mDecompiling {apk_path} into {apk_path[:-4]}\u001B[0m")
