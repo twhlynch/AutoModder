@@ -6,11 +6,12 @@ def modUnity3d(path, noWalls, noGrav, pvp):
     ignore = [ 'event', 'mode', 'voicemod' ]
     reenable = [ 'moder', 'vents' ]
     scale = [ ]
-    enable_parent = [ 'enable', 'button', 'equip' ]
+    enable_parent = []#[ 'enable', 'button', 'equip' ]
     enable_is = [ 'ara', 'aro', 'arm']
 
     if noWalls:
         disable.append('wall')
+        disable.append('roof')
     if noGrav:
         enable.append('grav')
         scale.append('grav')
@@ -66,6 +67,7 @@ def modUnity3d(path, noWalls, noGrav, pvp):
                     tree["m_IsActive"] = True
                     changed = True
                     will = "enable"
+                    print(f"\u001B[34mTraversing{color}|\u001B[0m GameObject {data.name}")
                     traverse_parents(data)
                     print(f"\u001B[34mTraversed {color}|\u001B[0m GameObject {data.name}")
 
@@ -75,8 +77,8 @@ def modUnity3d(path, noWalls, noGrav, pvp):
                     transform = data.m_Transform.get_obj()
                     transform_data = transform.read()
                     transform_tree = transform.read_typetree()
-                    transform_tree["m_LocalScale"] *= 100
-                    print(f'\u001B[34mScaled    {color}|\u001B[0m {transform_data.name} to {transform_tree["m_LocalScale"]}')
+                    transform_tree["m_LocalScale"]["x"] *= 100
+                    print(f'\u001B[34mScaled    {color}|\u001B[0m {data.name} to {transform_tree["m_LocalScale"]}')
                     transform.save_typetree(transform_tree)
 
                     # target_path = tree['m_Component'][0]['component']['m_PathID']
@@ -109,9 +111,11 @@ def traverse_parents(data):
     if parent is not None:
         parent_data = parent.read()
         print(f"\u001B[34mParent    |\u001B[0m GameObject {parent_data.name}")
-        parent_tree = parent.read_typetree()
+        parent_tree = parent_data.read_typetree()
+        print(parent_tree)
         parent_tree["m_IsActive"] = True
-        parent.save_typetree(parent_tree)
+        print(parent_tree)
+        parent_data.save_typetree(parent_tree)
         traverse_parents(parent_data)
 
 def decompile(apk_path):
