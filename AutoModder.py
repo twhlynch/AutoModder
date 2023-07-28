@@ -6,7 +6,7 @@ def modUnity3d(path, noWalls, noGrav, pvp):
     ignore = [ 'event', 'mode', 'voicemod' ]
     reenable = [ 'moder', 'vents' ]
     scale = [ ]
-    enable_parent = [ 'enable', 'button' ]
+    enable_parent = [ 'enable', 'button', 'equip' ]
     enable_is = [ 'ara', 'aro', 'arm']
 
     if noWalls:
