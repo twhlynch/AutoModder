@@ -138,15 +138,15 @@ def recompile(apk_path):
     sp = subprocess.Popen(['ApkSigner', 'sign', '--key', 'index.pk8', '--cert', 'index.pem', '--v4-signing-enabled', 'false', '--out', f"modded-{apk_path}", f"tmp2-{apk_path}"] , shell=True, stdin=subprocess.PIPE)
     sp.communicate(input=b'\n')
 
-    os.remove(f"tmp-{apk_path}")
-    os.remove(f"tmp2-{apk_path}")
-    shutil.rmtree(f"{apk_path[:-4]}")
-
 def main(apk_path, noWalls, noGrav, pvp):
     decompile(apk_path)
     apk_folder_path = apk_path[:-4]
     modUnity3d(f"{apk_folder_path}/assets/bin/Data/data.unity3d", noWalls, noGrav, pvp)
     recompile(apk_path)
+
+    os.remove(f"tmp-{apk_path}")
+    os.remove(f"tmp2-{apk_path}")
+    shutil.rmtree(f"{apk_path[:-4]}")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()

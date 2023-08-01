@@ -1,4 +1,4 @@
-import time, requests, webbrowser
+import time, requests, webbrowser, os, shutil, subprocess, threading, argparse
 
 def get_search_results(search_term):
 
@@ -15,19 +15,41 @@ def get_app_link(term):
     for i in range(len(results)):
         print(f'{i} | {results[i]["appName"]}: \u001B[32m{results[i]["packageName"]}\u001B[0m | {results[i]["id"]}')
 
-    selected = int(input('Select an app: '))
+    print('Select an app: ')
+    selected = 0
+    def selectInput():
+        selected = int(input())
+    input_thread = threading.Thread(target=selectInput)
+    input_thread.daemon = True
+    input_thread.start()
+    input_thread.join(5)
 
     return f'https://www.oculus.com/experiences/quest/{results[selected]["id"]}'
 
-links = []
-list = input('List of apps: ').split(', ')
+def parse_list(list):
+    apps = [app.strip() for app in list.split(',')]
+    return apps
 
-for term in list:
-    link = get_app_link(term)
-    links.append(link)
+def main(list):
+    links = []
 
-print(f'Opening {links} in 5s...')
-time.sleep(5)
+    template = "https://www.oculus.com/experiences/quest/"
+    for term in list:
+        if term.startswith(template):
+            links.append(term.split("?")[0])
+        else:
+            link = get_app_link(term)
+            links.append(link)
 
-for link in links:
-    webbrowser.open(link)
+    print(f'Opening {links} in 5s...')
+    time.sleep(5)
+
+    for link in links:
+        webbrowser.open(link)
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("app_list", type=parse_list, help="Comma-separated list of app names")
+    args = parser.parse_args()
+
+    main(args.app_list)
