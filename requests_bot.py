@@ -5,9 +5,10 @@ intents = discord.Intents.default()
 client = discord.Client(intents=intents)
 tree = app_commands.CommandTree(client)
 
-bot_token = ""
-request_channel_id = 10000000000000000
-guild_id = 100000000000000
+with open(".token", "r") as f:
+    bot_token = f.read().strip()
+request_channel_id = 1135841466992820254
+guild_id = 1135362081454043286
 
 @client.event
 async def on_ready():
@@ -16,9 +17,10 @@ async def on_ready():
 
 @tree.command(
     name='mod',
-    description='Request a modded APK (name, URL, or list of names/URLs)'
+    description='Request a modded APK (name, URL, or list of names/URLs)',
+    guild=discord.Object(id=guild_id)
 )
-async def submit(interaction: discord.Interaction, app_list: str):
+async def mod(interaction: discord.Interaction, app_list: str):
     user_id = interaction.user.id
     await interaction.response.send_message(f'Request for `{app_list}` submitted.')
     subprocess.Popen(["python", "download_apk.py", app_list])
