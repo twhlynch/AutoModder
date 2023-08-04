@@ -1,4 +1,4 @@
-import os, shutil, requests, discord
+import os, shutil, requests, discord, time
 
 with open(".token", "r") as f:
     bot_token = f.read().strip()
@@ -23,6 +23,7 @@ async def scan_folder(folder, announce_channel):
         output = "apks"
         for name in list:
             if name.endswith(".apk") and name.startswith("modded-"):
+                time.sleep(10)
                 if not os.path.exists(output):
                     os.makedirs(output)
                 print(f"Uploading {name}")

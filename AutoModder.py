@@ -1,13 +1,14 @@
 import UnityPy, os, subprocess, argparse, shutil
 
 def modUnity3d(path, noWalls, noGrav, pvp):
-    enable = [ 'kick', 'troll', 'enable', 'equip', 'rank', 'rgb', 'supporter', 'boost', 'platforms', 'fly', 'dev', 'rocket', 'fly', 'content', 'creator', 'hammer', 'gun', 'stick', 'button', 'mod', 'admin', 'owner', 'menu', 'perm', 'access', 'vip', 'trust', 'support', 'artist' ]
-    disable = [ 'block', 'vent', 'door', 'restrict', 'barrier', 'security', 'protect', 'anti' ]
+    enable = [ 'page', 'buy', 'cosmetic', 'kick', 'troll', 'enable', 'equip', 'rank', 'rgb', 'supporter', 'boost', 'platforms', 'fly', 'dev', 'rocket', 'fly', 'content', 'creator', 'hammer', 'gun', 'stick', 'button', 'mod', 'admin', 'owner', 'menu', 'perm', 'access', 'vip', 'trust', 'support', 'artist' ]
+    disable = [ 'disable', 'cover', 'block', 'vent', 'door', 'restrict', 'barrier', 'security', 'protect', 'anti' ]
     ignore = [ 'event', 'mode', 'voicemod' ]
-    reenable = [ 'moder', 'vents', 'owner', 'button']
+    reenable = [ 'moder', 'vents', 'owner', 'button', 'enable' ]
     scale = [ ]
     enable_parent = []#[ 'enable', 'button', 'equip' ]
-    enable_is = [ 'ara', 'aro', 'arm']
+    enable_is = [ 'next', 'iaps', 'ara', 'aro', 'arm', 'dmmw', 'emmw', 'eim', 'dim', 'yancc', 'cc', 'emm', 'dmm' ]
+    ends_in = [ ' on', ' enter' ]
 
     if noWalls:
         disable.append('wall')
@@ -34,6 +35,12 @@ def modUnity3d(path, noWalls, noGrav, pvp):
 
             for key in enable:
                 if key in data.name.lower():
+                    tree["m_IsActive"] = True
+                    changed = True
+                    will = "enable"
+                    
+            for key in ends_in:
+                if data.name.lower().endswith(key):
                     tree["m_IsActive"] = True
                     changed = True
                     will = "enable"
