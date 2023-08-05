@@ -34,8 +34,9 @@ def main(list):
     links = []
 
     template = "https://www.oculus.com/experiences/quest/"
+    template2 = "https://www.oculus.com/experiences/app/"
     for term in list:
-        if term.startswith(template):
+        if term.startswith(template) or term.startswith(template2):
             links.append(term.split("?")[0])
         else:
             link = get_app_link(term)
