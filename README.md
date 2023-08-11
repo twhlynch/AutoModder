@@ -22,8 +22,6 @@
 
 ```usage: AutoModder.py [-h] [--noWalls] [--noGrav] [--pvp] apk_path```
 
->Note: --noGrav and --pvp don't currently work
-
 ### Bulk APK mod
 
 - move APK files to this directory
