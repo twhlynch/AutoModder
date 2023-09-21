@@ -1,15 +1,35 @@
-import UnityPy, os, subprocess, argparse, shutil
+import UnityPy, os, subprocess, argparse, shutil, json
 
 def modUnity3d(path, noWalls, noGrav, pvp):
-    enable = [ 'platforms', 'page', 'buy', 'cosmetic', 'kick', 'troll', 'enable', 'equip', 'rank', 'rgb', 'supporter', 'boost', 'platforms', 'fly', 'dev', 'rocket', 'fly', 'content', 'creator', 'hammer', 'gun', 'stick', 'button', 'mod', 'admin', 'owner', 'menu', 'perm', 'access', 'vip', 'trust', 'support', 'artist' ]
-    disable = [ 'disable', 'cover', 'block', 'vent', 'door', 'restrict', 'barrier', 'security', 'protect', 'anti' ]
-    ignore = [ 'event', 'mode', 'voicemod' ]
-    reenable = [ 'moder', 'vents', 'owner', 'button', 'enable' ]
+    enable = []
+    disable = []
+    ignore = []
+    reenable = []
     scale = []
-    enable_parent = []#[ 'enable', 'button', 'equip' ]
-    enable_is = [ 'csp', 'yts', 'tts', 'next', 'iaps', 'ara', 'aro', 'arm', 'dmmw', 'emmw', 'eim', 'dim', 'yancc', 'cc', 'emm', 'dmm', 'enter a name to continue', 'enternamebox' ]
-    ends_in = [ ' on', ' enter' ]
-    # disable_is = [ 'fly2' ] # cebus
+    enable_is = []
+    ends_in = []
+    disable_is = [] # [ 'fly2' ] for cebus
+    # enable_parent = [ 'enable', 'button', 'equip' ] doesn't work yet
+    
+    with open("config.json", "r") as f:
+        config = json.load(f)
+        
+    if config["enable"]:
+        enable.extend(config["enable"])
+    if config["disable"]:
+        disable.extend(config["disable"])
+    if config["ignore"]:
+        ignore.extend(config["ignore"])
+    if config["reenable"]:
+        reenable.extend(config["reenable"])
+    if config["scale"]:
+        scale.extend(config["scale"])
+    if config["enable_is"]:
+        enable_is.extend(config["enable_is"])
+    if config["ends_in"]:
+        ends_in.extend(config["ends_in"])
+    if config["disable_is"]:
+        disable_is.extend(config["disable_is"])
 
     if noWalls:
         disable.append('wall')
@@ -76,14 +96,14 @@ def modUnity3d(path, noWalls, noGrav, pvp):
                     changed = True
                     will = "disable"
 
-            for key in enable_parent:
-                if key in data.name.lower():
-                    tree["m_IsActive"] = True
-                    changed = True
-                    will = "enable"
-                    print(f"\u001B[34mTraversing{color}|\u001B[0m GameObject {data.name}")
-                    traverse_parents(data)
-                    print(f"\u001B[34mTraversed {color}|\u001B[0m GameObject {data.name}")
+            # for key in enable_parent:
+            #     if key in data.name.lower():
+            #         tree["m_IsActive"] = True
+            #         changed = True
+            #         will = "enable"
+            #         print(f"\u001B[34mTraversing{color}|\u001B[0m GameObject {data.name}")
+            #         traverse_parents(data)
+            #         print(f"\u001B[34mTraversed {color}|\u001B[0m GameObject {data.name}")
 
             for key in scale:
                 if key in data.name.lower():

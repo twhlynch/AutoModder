@@ -1,4 +1,4 @@
-import time, requests, webbrowser, os, shutil, subprocess, threading, argparse
+import time, requests, webbrowser, argparse
 
 def get_search_results(search_term):
 
@@ -17,12 +17,7 @@ def get_app_link(term):
 
     print('Select an app: ')
     selected = 0
-    def selectInput():
-        selected = int(input())
-    input_thread = threading.Thread(target=selectInput)
-    input_thread.daemon = True
-    input_thread.start()
-    input_thread.join(5)
+    selected = int(input())
 
     return f'https://www.oculus.com/experiences/quest/{results[selected]["id"]}'
 

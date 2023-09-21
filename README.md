@@ -12,8 +12,10 @@
 ### Download apks
 
 - install (QAutoDL)[https://github.com/twhlynch/QAutoDL]
-- run `download_apks.py` (input example: `polarchase, gorilla sprinters, bad tag`)
+- run `search.py` (input example: `polarchase, gorilla sprinters, bad tag`)
 - links will open in your browser and if you have the extension the apks will be downloaded
+
+If this extension doesn't work at the time you are using this. Install the app onto your headset and use [SideQuest](https://sidequestvr.com/) to "backup" the apk to a folder.
 
 ### Single APK mod
 
