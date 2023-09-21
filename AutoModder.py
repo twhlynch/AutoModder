@@ -5,10 +5,11 @@ def modUnity3d(path, noWalls, noGrav, pvp):
     disable = [ 'disable', 'cover', 'block', 'vent', 'door', 'restrict', 'barrier', 'security', 'protect', 'anti' ]
     ignore = [ 'event', 'mode', 'voicemod' ]
     reenable = [ 'moder', 'vents', 'owner', 'button', 'enable' ]
-    scale = [ ]
+    scale = []
     enable_parent = []#[ 'enable', 'button', 'equip' ]
-    enable_is = [ 'next', 'iaps', 'ara', 'aro', 'arm', 'dmmw', 'emmw', 'eim', 'dim', 'yancc', 'cc', 'emm', 'dmm' ]
+    enable_is = [ 'csp', 'yts', 'tts', 'next', 'iaps', 'ara', 'aro', 'arm', 'dmmw', 'emmw', 'eim', 'dim', 'yancc', 'cc', 'emm', 'dmm', 'enter a name to continue', 'enternamebox' ]
     ends_in = [ ' on', ' enter' ]
+    # disable_is = [ 'fly2' ] # cebus
 
     if noWalls:
         disable.append('wall')
@@ -68,6 +69,12 @@ def modUnity3d(path, noWalls, noGrav, pvp):
                     tree["m_IsActive"] = True
                     changed = True
                     will = "enable"
+                    
+            for key in disable_is:
+                if key == data.name.lower():
+                    tree["m_IsActive"] = False
+                    changed = True
+                    will = "disable"
 
             for key in enable_parent:
                 if key in data.name.lower():
