@@ -26,3 +26,6 @@ If this extension doesn't work at the time you are using this. Install the app o
 - move APK files to this directory
 - run `bulk_run.bat`
 - APKs will be modded with `--noWalls`
+
+# Legal Disclaimer
+Please be aware that using or distributing the output from this software may be against copyright legislation in your jurisdiction. You are responsible for ensuring that you're not breaking any laws.
