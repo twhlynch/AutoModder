@@ -11,7 +11,7 @@
 
 ### Download apks
 
-- install (QAutoDL)[https://github.com/twhlynch/QAutoDL]
+- install [QAutoDL](https://github.com/twhlynch/QAutoDL)
 - run `search.py` (input example: `polarchase, gorilla sprinters, bad tag`)
 - links will open in your browser and if you have the extension the apks will be downloaded
 
