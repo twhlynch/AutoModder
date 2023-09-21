@@ -5,9 +5,7 @@
 ## Setup
 - [Python](https://www.python.org/)
 - `pip install UnityPy`
-- [Apktool](https://ibotpeaches.github.io/Apktool/) added to PATH
-- Might need [JDK](https://www.oracle.com/java/technologies/downloads/) added to PATH
-- [zipalign and Apksigner (Command-line tools)](https://developer.android.com/studio#command-line-tools-only) added to PATH
+- See [APK-Modding-Guide](https://github.com/twhlynch/APK-Modding-Guide) for requirements
 
 ## Usage
 
@@ -20,8 +18,6 @@
 ### Single APK mod
 
 ```usage: AutoModder.py [-h] [--noWalls] [--noGrav] [--pvp] apk_path```
-
->Note: --noGrav and --pvp don't currently work
 
 ### Bulk APK mod
 
