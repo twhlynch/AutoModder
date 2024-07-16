@@ -6,6 +6,12 @@ zipalign = binaries["zipalign"]
 apktool = binaries["apktool"]
 apksigner = binaries["apksigner"]
 
+results = {
+    "enabled": [],
+    "disabled": [],
+    "scaled": []
+}
+
 def modUnity3d(path, noWalls, noGrav, pvp):
     enable = []
     disable = []
@@ -110,13 +116,16 @@ def modUnity3d(path, noWalls, noGrav, pvp):
                     transform_tree["m_LocalScale"]["y"] *= 100
                     transform_tree["m_LocalScale"]["z"] *= 100
                     print(f'\u001B[34mScaled    {color}|\u001B[0m {data.name} to {transform_tree["m_LocalScale"]}')
+                    results["scaled"].append(data.name)
                     transform.save_typetree(transform_tree)
 
             if changed:
                 if will == "enable" and was == False:
                     print(f"\u001B[32mEnabled   {color}|\u001B[0m GameObject {data.name}")
+                    results["enabled"].append(data.name)
                 elif will == "disable" and was == True:
                     print(f"\u001B[31mDisabled  {color}|\u001B[0m GameObject {data.name}")
+                    results["disabled"].append(data.name)
                 else:
                     print(f"\u001B[33mIgnoring  {color}|\u001B[0m GameObject {data.name}")
             
@@ -158,6 +167,11 @@ def main(apk_path, noWalls, noGrav, pvp):
     os.remove(f"tmp-{apk_path}")
     os.remove(f"tmp2-{apk_path}")
     shutil.rmtree(f"{apk_path[:-4]}")
+    
+    print("\n\u001B[32mModifications complete\u001B[0m")
+    print(f"\u001B[32mEnabled:\u001B[0m {results['enabled']}\u001B[0m")
+    print(f"\u001B[31mDisabled:\u001B[0m {results['disabled']}\u001B[0m")
+    print(f"\u001B[34mScaled:\u001B[0m {results['scaled']}\u001B[0m")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
