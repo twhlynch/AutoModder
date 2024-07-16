@@ -1,5 +1,11 @@
 import UnityPy, os, subprocess, argparse, shutil, json
 
+with open("binaries.json", "r") as f:
+    binaries = json.load(f)
+zipalign = binaries["zipalign"]
+apktool = binaries["apktool"]
+apksigner = binaries["apksigner"]
+
 def modUnity3d(path, noWalls, noGrav, pvp):
     enable = []
     disable = []
@@ -8,8 +14,7 @@ def modUnity3d(path, noWalls, noGrav, pvp):
     scale = []
     enable_is = []
     ends_in = []
-    disable_is = [] # [ 'fly2' ] for cebus
-    # enable_parent = [ 'enable', 'button', 'equip' ] doesn't work yet
+    disable_is = []
     
     with open("config.json", "r") as f:
         config = json.load(f)
@@ -95,39 +100,17 @@ def modUnity3d(path, noWalls, noGrav, pvp):
                     tree["m_IsActive"] = False
                     changed = True
                     will = "disable"
-
-            # for key in enable_parent:
-            #     if key in data.name.lower():
-            #         tree["m_IsActive"] = True
-            #         changed = True
-            #         will = "enable"
-            #         print(f"\u001B[34mTraversing{color}|\u001B[0m GameObject {data.name}")
-            #         traverse_parents(data)
-            #         print(f"\u001B[34mTraversed {color}|\u001B[0m GameObject {data.name}")
-
+                    
             for key in scale:
                 if key in data.name.lower():
                     print(f"\u001B[34mScaling   {color}|\u001B[0m GameObject {data.name}")
                     transform = data.m_Transform.get_obj()
-                    transform_data = transform.read()
                     transform_tree = transform.read_typetree()
                     transform_tree["m_LocalScale"]["x"] *= 100
                     transform_tree["m_LocalScale"]["y"] *= 100
                     transform_tree["m_LocalScale"]["z"] *= 100
                     print(f'\u001B[34mScaled    {color}|\u001B[0m {data.name} to {transform_tree["m_LocalScale"]}')
                     transform.save_typetree(transform_tree)
-
-                    # target_path = tree['m_Component'][0]['component']['m_PathID']
-                    # for obj2 in env.objects:
-                    #     data2 = obj2.read()
-                    #     tree2 = data2.read_typetree()
-                    #     if hasattr(data2, 'path_id'):
-                    #         if data2.path_id == target_path:
-                    #             print(f"\u001B[34mFound Path{color}|\u001B[0m {data2.type.name} {data2.name}")
-                    #             tree2["m_LocalScale"] *= 100
-                    #             print(f"\u001B[34mScaled to {color}|\u001B[0m {data2.__getattribute__('m_LocalScale')}")
-                    #             obj2.save_typetree(tree2)
-                    #             break
 
             if changed:
                 if will == "enable" and was == False:
@@ -142,37 +125,31 @@ def modUnity3d(path, noWalls, noGrav, pvp):
     with open(path, "wb") as f:
         f.write(env.file.save())
 
-def traverse_parents(data):
-    parent = data.m_Transform.get_obj().read().m_Father.get_obj()
-    if parent is not None:
-        parent_data = parent.read()
-        print(f"\u001B[34mParent    |\u001B[0m GameObject {parent_data.name}")
-        parent_tree = parent_data.read_typetree()
-        print(parent_tree)
-        parent_tree["m_IsActive"] = True
-        print(parent_tree)
-        parent_data.save_typetree(parent_tree)
-        traverse_parents(parent_data)
-
 def decompile(apk_path):
     print(f"\u001B[32mDecompiling {apk_path} into {apk_path[:-4]}\u001B[0m")
-    sp = subprocess.Popen(["apktool", "d", "-f", apk_path], shell=True, stdin=subprocess.PIPE)
+    sp = subprocess.Popen(f"{apktool} d -f {apk_path} -o {apk_path[:-4]}", shell=True, stdin=subprocess.PIPE)
     sp.communicate(input=b'\n')
 
 def recompile(apk_path):
     print(f"\u001B[32mRecompiling {apk_path[:-4]} into {apk_path}\u001B[0m")
-    sp = subprocess.Popen(["apktool", "b", "-f", "--use-aapt2", "-d", apk_path[:-4], "-o", f"tmp-{apk_path}"], shell=True, stdin=subprocess.PIPE)
+    sp = subprocess.Popen(f"{apktool} b -f --use-aapt2 -d {apk_path[:-4]} -o tmp-{apk_path}", shell=True, stdin=subprocess.PIPE)
     sp.communicate(input=b'\n')
 
     print(f"\u001B[32mAligning {apk_path}\u001B[0m")
-    sp = subprocess.Popen(["zipalign", "-p", "4", f"tmp-{apk_path}", f"tmp2-{apk_path}"], shell=True, stdin=subprocess.PIPE)
+    sp = subprocess.Popen(f"{zipalign} -p 4 tmp-{apk_path} tmp2-{apk_path}", shell=True, stdin=subprocess.PIPE)
     sp.communicate(input=b'\n')
 
     print(f"\u001B[32mSigning {apk_path}\u001B[0m")
-    sp = subprocess.Popen(['ApkSigner', 'sign', '--key', 'index.pk8', '--cert', 'index.pem', '--v4-signing-enabled', 'false', '--out', f"modded-{apk_path}", f"tmp2-{apk_path}"] , shell=True, stdin=subprocess.PIPE)
+    sp = subprocess.Popen(f"{apksigner} sign --key index.pk8 --cert index.pem --v4-signing-enabled false --out modded-{apk_path} tmp2-{apk_path}", shell=True, stdin=subprocess.PIPE)
     sp.communicate(input=b'\n')
 
 def main(apk_path, noWalls, noGrav, pvp):
+    # if not os.path.exists(apk_path[:-4]):
+    #     os.mkdir(f"{apk_path[:-4]}")
+    # open(f"tmp-{apk_path}", 'a').close()
+    # open(f"tmp2-{apk_path}", 'a').close()
+    # open(f"modded-{apk_path}", 'a').close()
+    
     decompile(apk_path)
     apk_folder_path = apk_path[:-4]
     modUnity3d(f"{apk_folder_path}/assets/bin/Data/data.unity3d", noWalls, noGrav, pvp)

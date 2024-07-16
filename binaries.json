@@ -1,0 +1,5 @@
+{
+    "apktool": "apktool",
+    "zipalign": "/Users/twhlynch/Library/Android/sdk/build-tools/34.0.0/zipalign",
+    "apksigner": "/Users/twhlynch/Library/Android/sdk/build-tools/34.0.0/apksigner"
+}

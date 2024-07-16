@@ -1,4 +1,12 @@
 *.apk
 *.unity3d
+
 /apks
 .token
+
+.DS_Store
+
+pyvenv.cfg
+/lib
+/bin
+/include
