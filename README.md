@@ -7,6 +7,7 @@
 - See [APK-Modding-Guide](https://github.com/twhlynch/APK-Modding-Guide) for apktool, zipalign, and apksigner.
   
 Run `python3 -m venv .` to initialize a python virtual environment
+
 Run `bin/pip install UnityPy` to install UnityPy
 
 If apktool, zipalign, and/or apksigner aren't added to your PATH, modify `binaries.json` with the paths to apktool, zipalign, and apksigner.
